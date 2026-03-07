@@ -71,8 +71,8 @@ public class InputReader {
                 continue;
             }
 
-            if (min != null && value < min) {
-                System.out.println("Число должно быть не меньше " + min);
+            if (min != null && value <= min) {
+                System.out.println("Число должно быть больше " + min);
                 continue;
             }
 

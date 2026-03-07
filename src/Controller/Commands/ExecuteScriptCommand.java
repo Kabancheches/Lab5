@@ -35,8 +35,12 @@ public class ExecuteScriptCommand implements Command {
                     continue;
                 }
 
-                System.out.println("Номер команды: " + lineNumber + ". Выполнение команды: " + line);
-                commandManager.executeCommand(line);
+                if (!line.equals("execute_script")) {
+                    System.out.println("Номер команды: " + lineNumber + ". Выполнение команды: " + line);
+                    commandManager.executeCommand(line);
+                } else {
+                    System.out.println("Номер команды: " + lineNumber + ". Команда вызовет рекурсию пропускаем: " + line);
+                }
             }
             return true;
         } catch (IOException e) {
