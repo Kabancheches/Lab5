@@ -20,7 +20,7 @@ public class InputReader {
         return reader.readLine();
     }
 
-    public int readInt(String prompt, Integer min, Integer max) throws IOException {
+    public int readInt(String prompt, Integer min, Boolean isMinInclude, Integer max, Boolean isMaxInclude) throws IOException {
         while (true) {
             System.out.print(prompt);
             String input = readLine().trim();
@@ -38,14 +38,32 @@ public class InputReader {
                 continue;
             }
 
-            if (min != null && value < min) {
-                System.out.println("Число должно быть больше " + min);
-                continue;
+            if (min != null) {
+                if (!isMinInclude) {
+                    if (value <= min) {
+                        System.out.println("Число должно быть больше " + min + ".");
+                        continue;
+                    }
+                } else {
+                    if (value < min) {
+                        System.out.println("Число должно быть не меньше " + min + ".");
+                        continue;
+                    }
+                }
             }
 
-            if (max != null && value > max) {
-                System.out.println("Число должно быть меньше " + max);
-                continue;
+            if (max != null) {
+                if (!isMaxInclude) {
+                    if (value >= max) {
+                        System.out.println("Число должно быть меньше " + max + ".");
+                        continue;
+                    }
+                } else {
+                    if (value > max) {
+                        System.out.println("Число должно быть не больше " + max + ".");
+                        continue;
+                    }
+                }
             }
 
             return value;
@@ -72,12 +90,12 @@ public class InputReader {
             }
 
             if (min != null && value <= min) {
-                System.out.println("Число должно быть больше " + min);
+                System.out.println("Число должно быть больше " + min + ".");
                 continue;
             }
 
-            if (max != null && value > max) {
-                System.out.println("Число должно быть не больше " + max);
+            if (max != null && value >= max) {
+                System.out.println("Число должно быть меньше " + max + ".");
                 continue;
             }
 
@@ -103,13 +121,13 @@ public class InputReader {
                 continue;
             }
 
-            if (min != null && value < min) {
-                System.out.println("Число должно быть больше " + min);
+            if (min != null && value <= min) {
+                System.out.println("Число должно быть больше " + min + ".");
                 continue;
             }
 
-            if (min != null && value > max){
-                System.out.println("Число должно быть меньше " + max);
+            if (min != null && value >= max){
+                System.out.println("Число должно быть меньше " + max + ".");
             }
             return value;
         }
@@ -162,7 +180,7 @@ public class InputReader {
     public Coordinates readCoordinates() throws IOException {
         Coordinates coordinates = new Coordinates();
 
-        int x = readInt("Введите координату X (макс. 12): ", null, 12);
+        int x = readInt("Введите координату X (макс. 12): ", coordinates.getMinX(), coordinates.isMinXInclude(), coordinates.getMaxX(), coordinates.isMaxXInclude());
         float y = readFloat("Введите координату Y: ", null, null);
 
         coordinates.setX(x);
@@ -176,7 +194,7 @@ public class InputReader {
 
         float x = readFloat("Введите координату X: ", null, null);
         Long y = readLong("Введите координату Y: ", null, null);
-        int z = readInt("Введите координату Z: ", null, null);
+        int z = readInt("Введите координату Z: ", null, false,null,false);
 
         location.setX(x);
         location.setY(y);
@@ -203,7 +221,7 @@ public class InputReader {
 
         String name = readString("Введите название организации: ", false);
         String fullName = readString("Введите полное название: ", false);
-        int employeesCount = readInt("Введите количество сотрудников: ", 1, null);
+        int employeesCount = readInt("Введите количество сотрудников: ", organization.getMinEmployeesCount(), organization.isMinEmployeesCountIncluded(), organization.getMaxEmployeeCount(), organization.isMaxEmployeeCountIncluded());
 
         OrganizationType type;
         System.out.print("Ввести тип организации? (y/n): ");

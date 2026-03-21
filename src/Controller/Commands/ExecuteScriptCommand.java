@@ -35,7 +35,7 @@ public class ExecuteScriptCommand implements Command {
                     continue;
                 }
 
-                if (!line.equals("execute_script")) {
+                if (!line.startsWith("execute_script")) {
                     System.out.println("Номер команды: " + lineNumber + ". Выполнение команды: " + line);
                     commandManager.executeCommand(line);
                 } else {

@@ -6,6 +6,10 @@ import java.util.Objects;
 
 public class Coordinates implements Validate {
     private int x; //Максимальное значение поля 12
+    private Integer minX = null;
+    private Boolean isMinXInclude = null;
+    private Integer maxX = 12;
+    private Boolean isMaxXInclude = true;
     private float y;
 
     public Coordinates(int x, float y) {
@@ -31,6 +35,21 @@ public class Coordinates implements Validate {
         this.y = y;
     }
 
+    public Integer getMaxX() {
+        return maxX;
+    }
+
+    public Boolean isMaxXInclude() {
+        return isMaxXInclude;
+    }
+
+    public Integer getMinX() {
+        return minX;
+    }
+
+    public Boolean isMinXInclude() {
+        return isMinXInclude;
+    }
 
     @Override
     public boolean validate() {

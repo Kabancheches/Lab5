@@ -31,11 +31,9 @@ public class Main {
                 PriorityQueue<Product> products = fileManager.readCollection();
                 collectionManager = new CollectionManager(products);
                 ui.printInfo("Введите 'help' для получения справки.");
-                ui.printSeparator();
                 ui.printSuccess("Коллекция загружена из файла: " + fileName);
             } catch (IllegalArgumentException e) {
                 ui.printInfo("Введите 'help' для получения справки.");
-                ui.printSeparator();
                 ui.printError("Ошибка при загрузке данных из файла: " + e.getMessage());
                 collectionManager = new CollectionManager();
             }
@@ -53,9 +51,11 @@ public class Main {
                                 PriorityQueue<Product> products = fileManager.readCollection();
                                 collectionManager = new CollectionManager(products);
                                 ui.printSuccess("Коллекция загружена из файла: " + fileName);
+                                ui.printInfo("Введите 'help' для получения справки.");
                             } catch (IllegalArgumentException e) {
                                 ui.printError("Ошибка при загрузке данных из файла: " + e.getMessage());
                                 collectionManager = new CollectionManager();
+                                ui.printInfo("Введите 'help' для получения справки.");
                             }
                             break;
                         } else {
@@ -68,6 +68,7 @@ public class Main {
                                         file.createNewFile();
                                         ui.printSuccess("Файл создан.");
                                         fileManager = new FileManager(fileName);
+                                        ui.printInfo("Введите 'help' для получения справки.");
                                     } catch (IOException e) {
                                         ui.printError(e.getMessage());
                                     }
@@ -81,7 +82,6 @@ public class Main {
 
                 } catch (IOException e) {
                     System.err.println("Ошибка: " + e);
-
                 }
             }
         }
@@ -122,11 +122,8 @@ public class Main {
                 new PrintFieldDescendingUnitOfMeasureCommand(collectionManager));
     }
 
-    private static void runInteractiveMode(CommandManager commandManager,
-                                           InputReader inputReader,
-                                           ExitCommand exitCommand) {
+    private static void runInteractiveMode(CommandManager commandManager, InputReader inputReader, ExitCommand exitCommand) {
         try {
-
             while (!exitCommand.isNeedExit()) {
                 System.out.print("> ");
                 String input = inputReader.readLine();

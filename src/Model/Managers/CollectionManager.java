@@ -39,7 +39,7 @@ public class CollectionManager {
         idList.sort(null);
         if (!idList.isEmpty()) {
             for (int i = 1; i < idList.size(); i++) {
-                if (idList.get(currentId) - idList.get(i) > 0) {
+                if (idList.get(currentId++) - idList.get(i) > 0) {
                     return idList.get(currentId) + 1;
                 }
             }
