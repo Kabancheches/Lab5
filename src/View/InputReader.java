@@ -3,14 +3,16 @@ package View;
 import Model.Classes.*;
 import Model.Enums.OrganizationType;
 import Model.Enums.UnitOfMeasure;
+import Model.Validator.Validator;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDateTime;
 
 public class InputReader {
-
-    private BufferedReader reader;
+    private final Validator validator = new Validator();
+    private final BufferedReader reader;
 
     public InputReader() {
         this.reader = new BufferedReader(new InputStreamReader(System.in));
@@ -20,7 +22,7 @@ public class InputReader {
         return reader.readLine();
     }
 
-    public int readInt(String prompt, Integer min, Boolean isMinInclude, Integer max, Boolean isMaxInclude) throws IOException {
+    public int readInt(String prompt) throws IOException {
         while (true) {
             System.out.print(prompt);
             String input = readLine().trim();
@@ -38,72 +40,32 @@ public class InputReader {
                 continue;
             }
 
-            if (min != null) {
-                if (!isMinInclude) {
-                    if (value <= min) {
-                        System.out.println("Число должно быть больше " + min + ".");
-                        continue;
-                    }
-                } else {
-                    if (value < min) {
-                        System.out.println("Число должно быть не меньше " + min + ".");
-                        continue;
-                    }
-                }
-            }
-
-            if (max != null) {
-                if (!isMaxInclude) {
-                    if (value >= max) {
-                        System.out.println("Число должно быть меньше " + max + ".");
-                        continue;
-                    }
-                } else {
-                    if (value > max) {
-                        System.out.println("Число должно быть не больше " + max + ".");
-                        continue;
-                    }
-                }
-            }
-
             return value;
         }
     }
 
-    public float readFloat(String prompt, Float min, Float max) throws IOException {
+    public float readFloat(String prompt) throws IOException, IllegalArgumentException {
         while (true) {
             System.out.print(prompt);
             String input = readLine().trim();
-            input = input.replace(',', '.');
 
             if (input.isEmpty()) {
                 System.out.println("Значение не может быть пустым.");
                 continue;
             }
 
+            input = input.replace(',', '.');
             float value;
             try {
                 value = Float.parseFloat(input);
             } catch (NumberFormatException e) {
-                System.out.println("Некорректный ввод данных. Введите число с плавающей точкой.");
-                continue;
+                throw new IllegalArgumentException("ОШИБКА: Некорректный ввод данных. Введите число с плавающей точкой.");
             }
-
-            if (min != null && value <= min) {
-                System.out.println("Число должно быть больше " + min + ".");
-                continue;
-            }
-
-            if (max != null && value >= max) {
-                System.out.println("Число должно быть меньше " + max + ".");
-                continue;
-            }
-
             return value;
         }
     }
 
-    public Long readLong(String prompt, Long min, Long max) throws IOException {
+    public Long readLong(String prompt) throws IOException {
         while (true) {
             System.out.print(prompt);
             String input = readLine().trim();
@@ -119,15 +81,6 @@ public class InputReader {
             } catch (NumberFormatException e) {
                 System.out.println("Некорректный ввод. Введите целое число.");
                 continue;
-            }
-
-            if (min != null && value <= min) {
-                System.out.println("Число должно быть больше " + min + ".");
-                continue;
-            }
-
-            if (min != null && value >= max){
-                System.out.println("Число должно быть меньше " + max + ".");
             }
             return value;
         }
@@ -161,7 +114,7 @@ public class InputReader {
 
         while (true) {
             System.out.print(prompt);
-            String input = readLine().trim().toUpperCase();
+            String input = readLine().trim();
 
             try {
                 return Enum.valueOf(enumClass, input);
@@ -180,8 +133,8 @@ public class InputReader {
     public Coordinates readCoordinates() throws IOException {
         Coordinates coordinates = new Coordinates();
 
-        int x = readInt("Введите координату X (макс. 12): ", coordinates.getMinX(), coordinates.isMinXInclude(), coordinates.getMaxX(), coordinates.isMaxXInclude());
-        float y = readFloat("Введите координату Y: ", null, null);
+        int x = readInt("Введите координату X: ");
+        float y = readFloat("Введите координату Y: ");
 
         coordinates.setX(x);
         coordinates.setY(y);
@@ -192,9 +145,9 @@ public class InputReader {
     public Location readLocation() throws IOException {
         Location location = new Location();
 
-        float x = readFloat("Введите координату X: ", null, null);
-        Long y = readLong("Введите координату Y: ", null, null);
-        int z = readInt("Введите координату Z: ", null, false,null,false);
+        float x = readFloat("Введите координату X: ");
+        Long y = readLong("Введите координату Y: ");
+        int z = readInt("Введите координату Z: ");
 
         location.setX(x);
         location.setY(y);
@@ -206,14 +159,26 @@ public class InputReader {
     public Address readAddress() throws IOException {
         Address address = new Address();
 
-        String street = readString("Введите улицу (если строка пустая, значение будет null): ", true);
-        System.out.println("Введите местоположение:");
-        Location town = readLocation();
+        while (true) {
+            String street = readString("Введите улицу (street) (если строка пустая, значение будет null): ", true);
+            Location town;
+            while (true) {
+                System.out.println("Введите местоположение (Location):");
+                try {
+                    town = readLocation();
+                    if (validator.validateLocation(town)) {
+                        break;
+                    }
+                } catch (NullPointerException e) {
+                    System.out.println("Поле y не может быть null.");
+                }
+            }
 
-        address.setStreet(street);
-        address.setTown(town);
+            address.setStreet(street);
+            address.setTown(town);
 
-        return address;
+            return address;
+        }
     }
 
     public Organization readOrganization() throws IOException {
@@ -221,8 +186,20 @@ public class InputReader {
 
         String name = readString("Введите название организации: ", false);
         String fullName = readString("Введите полное название: ", false);
-        int employeesCount = readInt("Введите количество сотрудников: ", organization.getMinEmployeesCount(), organization.isMinEmployeesCountIncluded(), organization.getMaxEmployeeCount(), organization.isMaxEmployeeCountIncluded());
 
+        int employeesCount;
+        while (true) {
+            try {
+                employeesCount = readInt("Введите количество сотрудников: ");
+                if (validator.validateEmployeeCount(employeesCount)) {
+                break;
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println();
+                System.out.println(e.getMessage());
+                System.out.println();
+            }
+        }
         OrganizationType type;
         System.out.print("Ввести тип организации? (y/n): ");
         if (readLine().trim().equalsIgnoreCase("y")) {
@@ -231,44 +208,103 @@ public class InputReader {
             type = null;
         }
 
-        System.out.println("Введите адрес организации:");
+        System.out.println("Введите адрес организации (Address):");
         Address address = readAddress();
+
 
         organization.setName(name);
         organization.setFullName(fullName);
         organization.setEmployeesCount(employeesCount);
         organization.setType(type);
         organization.setOfficialAddress(address);
-
         return organization;
     }
 
     public Product readProduct() throws IOException {
         Product product = new Product();
 
-        String name = readString("Введите название продукта: ", false);
+        String name;
+        while (true) {
+            System.out.println("Введите название продукта (Product): ");
+            try {
+                name = readLine();
+                if (validator.validateName(name)) {
+                    break;
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println();
+                System.out.println(e.getMessage());
+                System.out.println();
+            } catch (IOException e) {
+                throw new IOException(e);
+            }
+        }
 
-        System.out.println("Введите координаты:");
-        Coordinates coordinates = readCoordinates();
+        Coordinates coordinates;
+        while (true) {
+            System.out.println("Введите координаты (Coordinates): ");
+            System.out.println(validator.coordinatesPrompt);
+            coordinates = readCoordinates();
+            
+            try {
+                if (validator.validateCoordinates(coordinates)) {
+                    break;
+                }
+            } catch (IllegalArgumentException e) {
+                System.out.println();
+                System.out.println(e.getMessage());
+                System.out.println();
+            }
+        }
 
-        float price = readFloat("Введите цену (больше 0): ", 0f, null);
+        float price;
+        while (true) {
+            try {
+                price = readFloat("Введите цену (price): ");
+                if (validator.validatePrice(price)) {
+                    break;
+                }
+            } catch (IllegalArgumentException | IOException e) {
+                System.out.println();
+                System.out.println(e.getMessage());
+                System.out.println();
+            }
+        }
 
         UnitOfMeasure unitOfMeasure;
-        System.out.print("Ввести единицу измерения? (y/n): ");
-        if (readLine().trim().equalsIgnoreCase("y")) {
-            unitOfMeasure = readEnum("Выберите единицу измерения: ", UnitOfMeasure.class);
-        } else {
-            unitOfMeasure = null;
+        while (true) {
+            System.out.print("Ввести единицу измерения (UnitOfMeasure)? (y/n): ");
+            String line = readLine().trim();
+            if (line.equalsIgnoreCase("y")) {
+                unitOfMeasure = readEnum("Выберите единицу измерения (UnitOfMeasure): ", UnitOfMeasure.class);
+                break;
+            } else if (line.equalsIgnoreCase("n")) {
+                System.out.println("Поле будет null.");
+                unitOfMeasure = null;
+                break;
+            }
         }
 
         Organization manufacturer;
-        System.out.print("Ввести производителя? (y/n): ");
+        System.out.print("Ввести производителя (Organization)? (y/n): ");
         if (readLine().trim().equalsIgnoreCase("y")) {
-            System.out.println("Введите информацию о производителе:");
-            manufacturer = readOrganization();
-        } else {
-            manufacturer = null;
-        }
+            while (true) {
+                System.out.println("Введите информацию о производителе (Organization):");
+                manufacturer = readOrganization();
+
+                try {
+                    if (manufacturer != null && validator.validateOrganizationBeforeId(manufacturer)) {
+                        break;
+                    } else {
+                        System.out.println("Ошибка валидации организации (Organization). Проверьте введённые данные.");
+                    }
+                } catch (Exception e) {
+                    System.out.println();
+                    System.out.println(e.getMessage());
+                    System.out.println();
+                }
+            }
+        } else manufacturer = null;
 
         product.setName(name);
         product.setCoordinates(coordinates);
@@ -277,6 +313,15 @@ public class InputReader {
         product.setManufacturer(manufacturer);
         product.setCreationDate(LocalDateTime.now());
 
+        try {
+            if (validator.validateWithoutIdProduct(product)) {
+                return product;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
         return product;
     }
 }

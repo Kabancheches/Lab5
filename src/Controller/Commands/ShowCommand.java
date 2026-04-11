@@ -7,7 +7,7 @@ import java.util.PriorityQueue;
 
 public class ShowCommand implements Command {
     private final CollectionManager collectionManager;
-
+    public static String name = "show";
     public ShowCommand(CollectionManager collectionManager) {
         this.collectionManager = collectionManager;
     }
@@ -36,6 +36,6 @@ public class ShowCommand implements Command {
 
     @Override
     public String getName() {
-        return "show";
+        return name;
     }
 }

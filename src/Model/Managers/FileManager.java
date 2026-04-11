@@ -3,6 +3,7 @@ package Model.Managers;
 import Model.Classes.*;
 import Model.Enums.OrganizationType;
 import Model.Enums.UnitOfMeasure;
+import Model.Validator.Validator;
 import com.opencsv.CSVParser;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
@@ -16,12 +17,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 
-public class FileManager {
+public class FileManager  {
     private final String PATH;
     private final File file;
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
     private static final String head = "id,name,x,y,creationDate,price,unitOfMeasure,orgId,orgName,orgFullName,employeesCount,orgType,street,locX,locY,locZ";
     private static final int fieldsNumber = 16;
+    Validator validator = new Validator();
 
     public FileManager(String PATH) {
         this.PATH = PATH;
@@ -207,11 +209,11 @@ public class FileManager {
         Product product = new Product();
         int partNumber = 0;
 
-        if (line.length < 16) {         //16 полей в csv должно быть
+        if (line.length < fieldsNumber) {
             throw new IllegalArgumentException("Недостаточно полей класса Product.");
         }
 
-        if (line.length > 16) {
+        if (line.length > fieldsNumber) {
             throw new IllegalArgumentException("Переизбыток полей класса Product.");
         }
 
@@ -266,7 +268,7 @@ public class FileManager {
                 }
 
                 if (!wasHead) {
-                    if (line.length == 16 && String.join(",", line).equals(head)) {
+                    if (line.length == fieldsNumber && String.join(",", line).equals(head)) {
                         wasHead = true;
                         continue;
                     } else {
@@ -277,7 +279,7 @@ public class FileManager {
                 try {
                     Product product = parseProduct(line, new CSVParser().parseLine(head));
                     if (product != null) {
-                        if (product.validate()) {
+                        if (validator.validateWithIdProduct(product)) {
                             products.add(product);
                         } else {
                             System.err.println("Product на строке: " + lineNumber + ". Product пропущен из-за некорректных значений полей.");
@@ -380,8 +382,8 @@ public class FileManager {
             Product product;
             PriorityQueue<Product> bufferQueque = new PriorityQueue<>(collection);
 
-            while ((product = bufferQueque.poll()) != null){
-                if (!product.validate()) {
+            while ((product = bufferQueque.poll()) != null) {
+                if (!validator.validateWithIdProduct(product)) {
                     System.err.println("Product id=" + product.getId() + "не прошёл валидацию и не будет записан в файл. ");
                     continue;
                 }

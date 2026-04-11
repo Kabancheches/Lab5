@@ -1,6 +1,5 @@
 package Model.Classes;
 
-
 import java.util.Objects;
 
 public class Address {

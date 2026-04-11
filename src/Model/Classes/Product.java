@@ -1,13 +1,12 @@
 package Model.Classes;
 
 import Model.Enums.UnitOfMeasure;
-import Model.Interfaces.Validate;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class Product  implements Validate, Comparable<Product> {
+public class Product  implements Comparable<Product> {
     private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
@@ -36,17 +35,6 @@ public class Product  implements Validate, Comparable<Product> {
     }
 
     public Product() {}
-
-
-    @Override
-    public boolean validate() {
-        if (id == null || id <= 0) return false;
-        if (name == null || name.isEmpty()) return false;
-        if (coordinates == null || !coordinates.validate()) return false;
-        if (creationDate == null) return false;
-        if (price <= 0) return false;
-        return true;
-    }
 
     public Long getId() {
         return id;

@@ -4,7 +4,7 @@ import Model.Managers.CollectionManager;
 import Model.Managers.FileManager;
 
 public class SaveCommand implements Command {
-
+    public static String name = "save";
     private final CollectionManager collectionManager;
     private final FileManager fileManager;
 
@@ -20,11 +20,11 @@ public class SaveCommand implements Command {
                 System.out.println("Коллекция успешно сохранена в файл.");
                 return true;
             } else {
-                System.err.println("Не удалось сохранить коллекцию.");
+                System.err.println("[ОШИБКА] Не удалось сохранить коллекцию.");
                 return false;
             }
         } catch (Exception e) {
-            System.err.println("Ошибка при сохранении: " + e.getMessage());
+            System.err.println("[ОШИБКА] Ошибка при сохранении: " + e.getMessage());
             return false;
         }
     }
@@ -36,6 +36,6 @@ public class SaveCommand implements Command {
 
     @Override
     public String getName() {
-        return "save";
+        return name;
     }
 }

@@ -4,7 +4,7 @@ package Controller.Commands;
 import Model.Managers.CollectionManager;
 
 public class ClearCommand implements Command {
-
+    public static String name = "clear";
     private final CollectionManager collectionManager;
 
     public ClearCommand(CollectionManager collectionManager) {
@@ -25,6 +25,6 @@ public class ClearCommand implements Command {
 
     @Override
     public String getName() {
-        return "clear";
+        return name;
     }
 }

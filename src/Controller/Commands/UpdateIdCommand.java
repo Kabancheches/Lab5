@@ -1,5 +1,6 @@
 package Controller.Commands;
 
+import Model.Classes.Organization;
 import Model.Managers.CollectionManager;
 import Model.Classes.Product;
 import View.InputReader;
@@ -8,7 +9,7 @@ import View.InputReader;
 public class UpdateIdCommand implements Command {
     private final CollectionManager collectionManager;
     private final InputReader inputReader;
-
+    public static String name = "update";
     public UpdateIdCommand(CollectionManager collectionManager, InputReader inputReader) {
         this.collectionManager = collectionManager;
         this.inputReader = inputReader;
@@ -17,7 +18,7 @@ public class UpdateIdCommand implements Command {
     @Override
     public boolean execute(String[] args) {
         if (args.length < 2) {
-            System.err.println("Использование: update <id>, где <id> - это id объекта класса Product, который вы хотите обновить.");
+            System.err.println("[ОШИБКА] Использование: update <id>, где <id> - это id объекта класса Product, который вы хотите обновить.");
             return false;
         }
 
@@ -27,22 +28,26 @@ public class UpdateIdCommand implements Command {
 
             Product existingProduct = collectionManager.getProductById(id);
             if (existingProduct == null) {
-                System.err.println("Продукт с ID " + id + " не найден.");
+                System.err.println("[ОШИБКА] Продукт с ID " + id + " не найден.");
                 return false;
             }
 
             Product newProduct = inputReader.readProduct();
             newProduct.setId(id);
+            Organization manufacturer = newProduct.getManufacturer();
+            if (manufacturer != null) {
+                manufacturer.setId(collectionManager.getFirstNotUsedIdOrganization());
+            }
             newProduct.setCreationDate(existingProduct.getCreationDate());
             collectionManager.removeById(id);
             collectionManager.addProduct(newProduct);
             return true;
 
         } catch (NumberFormatException e) {
-            System.err.println("Некорректный ID. Должно быть число.");
+            System.err.println("[ОШИБКА] Некорректный ID. Должно быть число.");
             return false;
         } catch (Exception e) {
-            System.err.println("Ошибка при обновлении: " + e.getMessage());
+            System.err.println("[ОШИБКА] Ошибка при обновлении: " + e.getMessage());
             return false;
         }
     }
@@ -54,6 +59,6 @@ public class UpdateIdCommand implements Command {
 
     @Override
     public String getName() {
-        return "update";
+        return name;
     }
 }

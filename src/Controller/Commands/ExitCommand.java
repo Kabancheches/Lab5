@@ -1,7 +1,7 @@
 package Controller.Commands;
 
 public class ExitCommand implements Command {
-
+    public static String name = "exit";
     private boolean needExit = false;
 
     @Override
@@ -22,6 +22,6 @@ public class ExitCommand implements Command {
 
     @Override
     public String getName() {
-        return "exit";
+        return name;
     }
 }

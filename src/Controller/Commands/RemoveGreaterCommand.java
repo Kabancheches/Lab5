@@ -1,5 +1,6 @@
 package Controller.Commands;
 
+import Model.Classes.Organization;
 import Model.Managers.CollectionManager;
 import Model.Classes.Product;
 import View.InputReader;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RemoveGreaterCommand implements Command {
-
+    public static String name = "remove_greater";
     private final CollectionManager collectionManager;
     private final InputReader inputReader;
 
@@ -32,6 +33,11 @@ public class RemoveGreaterCommand implements Command {
     public boolean execute(String[] args) {
         try {
             Product product = inputReader.readProduct();
+            product.setId(collectionManager.getFirstNotUsedIdProduct());
+            Organization manufacturer = product.getManufacturer();
+            if (manufacturer != null) {
+                manufacturer.setId(collectionManager.getFirstNotUsedIdOrganization());
+            }
             ArrayList<Product> filteredProducts = productsFilteredGreaterThanPrice(product.getPrice());
             for (Product deletingProduct: filteredProducts) {
                 collectionManager.removeById(deletingProduct.getId());
@@ -40,7 +46,7 @@ public class RemoveGreaterCommand implements Command {
             filteredProducts.forEach(System.out::println);
             return true;
         } catch (Exception e) {
-            System.err.println("Ошибка: " + e.getMessage());
+            System.err.println("[ОШИБКА] " + e.getMessage());
             return false;
         }
     }
@@ -52,6 +58,6 @@ public class RemoveGreaterCommand implements Command {
 
     @Override
     public String getName() {
-        return "remove_greater";
+        return name;
     }
 }

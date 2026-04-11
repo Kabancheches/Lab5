@@ -23,7 +23,7 @@ public class CollectionManager {
     public CollectionManager(PriorityQueue<Product> collection) {
         this.collection = new PriorityQueue<>(collection);
         this.initializationDate = LocalDateTime.now();
-        for (int i = 0; i < collection.size(); i++) {
+        for (int i = 0; i < this.collection.size(); i++) {
             Product product = collection.poll();
             idListProduct.add(product.getId());
             if (product.getManufacturer() != null) {
@@ -35,18 +35,17 @@ public class CollectionManager {
     }
 
     public Long getFirstNotUsedId(ArrayList<Long> idList) {
-        int currentId = 0;
         idList.sort(null);
         if (!idList.isEmpty()) {
-            for (int i = 1; i < idList.size(); i++) {
-                if (idList.get(currentId++) - idList.get(i) > 0) {
-                    return idList.get(currentId) + 1;
-                }
-            }
-            if (idList.get(0) == 1L) {
-                return 2L;
-            } else {
+            if (idList.get(0) > 1L) {
                 return 1L;
+            } else {
+                for (int i = 1; i < idList.size(); i++) {
+                    if (idList.get(i) - idList.get(i-1) > 1) {
+                        return idList.get(i-1) + 1;
+                    }
+                }
+                return (idList.get(idList.size() - 1) + 1);
             }
         } else {
             return 1L;
@@ -87,6 +86,9 @@ public class CollectionManager {
         }
         idListProduct.add(product.getId());
         idListProduct.sort(null);
+        if (product.getManufacturer() != null) {
+            idListOrganization.add(product.getManufacturer().getId());
+        }
         return collection.add(product);
     }
 
@@ -128,5 +130,4 @@ public class CollectionManager {
         collection.clear();
         idListProduct.clear();
     }
-
 }

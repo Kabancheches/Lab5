@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public class ExecuteScriptCommand implements Command {
     private final CommandManager commandManager;
-
+    public static String name = "execute_script";
     public ExecuteScriptCommand(CommandManager commandManager) {
         this.commandManager = commandManager;
     }
@@ -44,7 +44,7 @@ public class ExecuteScriptCommand implements Command {
             }
             return true;
         } catch (IOException e) {
-            System.out.println("Ошибка чтения файла: " + e.getMessage());
+            System.out.println("[ОШИБКА] Ошибка чтения файла: " + e.getMessage());
             return false;
         }
     }
@@ -56,6 +56,6 @@ public class ExecuteScriptCommand implements Command {
 
     @Override
     public String getName() {
-        return "execute_script";
+        return name;
     }
 }

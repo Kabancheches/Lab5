@@ -4,7 +4,7 @@ import Model.Managers.CollectionManager;
 
 public class RemoveByIdCommand implements Command {
     private final CollectionManager collectionManager;
-
+    public static String name = "remove_by_id";
     public RemoveByIdCommand(CollectionManager collectionManager) {
         this.collectionManager = collectionManager;
     }
@@ -12,7 +12,7 @@ public class RemoveByIdCommand implements Command {
     @Override
     public boolean execute(String[] args) {
         if (args.length < 2) {
-            System.err.println("Использование: remove_by_id <id>, где <id> - это id объекта класса Product, который вы хотите удалить.");
+            System.err.println("[ОШИБКА] Использование: remove_by_id <id>, где <id> - это id объекта класса Product, который вы хотите удалить.");
             return false;
         }
 
@@ -22,11 +22,11 @@ public class RemoveByIdCommand implements Command {
                 System.out.println("Продукт с ID " + id + " успешно удален.");
                 return true;
             } else {
-                System.err.println("Продукт с ID " + id + " не найден.");
+                System.err.println("[ОШИБКА] Продукт с ID " + id + " не найден.");
                 return false;
             }
         } catch (NumberFormatException e) {
-            System.err.println("Некорректный ID. Должно быть число.");
+            System.err.println("[ОШИБКА] Некорректный ID. Должно быть число.");
             return false;
         }
     }
@@ -38,6 +38,6 @@ public class RemoveByIdCommand implements Command {
 
     @Override
     public String getName() {
-        return "remove_by_id";
+        return name;
     }
 }

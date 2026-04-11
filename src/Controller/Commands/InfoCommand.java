@@ -5,7 +5,7 @@ import Model.Managers.CollectionManager;
 import java.time.format.DateTimeFormatter;
 
 public class InfoCommand implements Command {
-
+    public static String name = "info";
     private final CollectionManager collectionManager;
     private static final DateTimeFormatter FORMATTER =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -30,6 +30,6 @@ public class InfoCommand implements Command {
 
     @Override
     public String getName() {
-        return "info";
+        return name;
     }
 }

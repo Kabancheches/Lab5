@@ -1,5 +1,6 @@
 package Controller.Commands;
 
+import Model.Classes.Organization;
 import View.InputReader;
 import Model.Managers.CollectionManager;
 import Model.Classes.Product;
@@ -7,7 +8,7 @@ import Model.Classes.Product;
 import java.util.PriorityQueue;
 
 public class AddIfMinCommand implements Command {
-
+    public static String name = "";
     private final CollectionManager collectionManager;
     private final InputReader inputReader;
 
@@ -32,6 +33,10 @@ public class AddIfMinCommand implements Command {
         try {
             Product product = inputReader.readProduct();
             product.setId(collectionManager.getFirstNotUsedIdProduct());
+            Organization manufacturer = product.getManufacturer();
+            if (manufacturer != null) {
+                manufacturer.setId(collectionManager.getFirstNotUsedIdOrganization());
+            }
 
             if (ifLowerThanMin(product)) {
                 collectionManager.addProduct(product);
@@ -42,7 +47,7 @@ public class AddIfMinCommand implements Command {
                 return false;
             }
         } catch (Exception e) {
-            System.out.println("Ошибка: " + e.getMessage());
+            System.out.println("[ОШИБКА] " + e.getMessage());
             return false;
         }
     }
@@ -54,6 +59,6 @@ public class AddIfMinCommand implements Command {
 
     @Override
     public String getName() {
-        return "add_if_min";
+        return name;
     }
 }

@@ -5,7 +5,7 @@ import Controller.CommandManager;
 import java.util.List;
 
 public class HelpCommand implements Command {
-
+    public static String name = "help";
     private final CommandManager commandManager;
 
     public HelpCommand(CommandManager commandManager) {
@@ -30,6 +30,6 @@ public class HelpCommand implements Command {
 
     @Override
     public String getName() {
-        return "help";
+        return name;
     }
 }

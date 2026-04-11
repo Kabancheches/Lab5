@@ -103,22 +103,22 @@ public class Main {
                                          FileManager fileManager,
                                          InputReader inputReader,
                                          ExitCommand exitCommand) {
-        manager.registerCommand("help", new HelpCommand(manager));
-        manager.registerCommand("info", new InfoCommand(collectionManager));
-        manager.registerCommand("show", new ShowCommand(collectionManager));
-        manager.registerCommand("add", new AddCommand(collectionManager, inputReader));
-        manager.registerCommand("update", new UpdateIdCommand(collectionManager, inputReader));
-        manager.registerCommand("remove_by_id", new RemoveByIdCommand(collectionManager));
-        manager.registerCommand("clear", new ClearCommand(collectionManager));
-        manager.registerCommand("save", new SaveCommand(collectionManager, fileManager));
-        manager.registerCommand("execute_script", new ExecuteScriptCommand(manager));
-        manager.registerCommand("exit", exitCommand);
-        manager.registerCommand("add_if_min", new AddIfMinCommand(collectionManager, inputReader));
-        manager.registerCommand("remove_greater", new RemoveGreaterCommand(collectionManager, inputReader));
-        manager.registerCommand("remove_lower", new RemoveLowerCommand(collectionManager, inputReader));
-        manager.registerCommand("filter_by_price", new FilterByPriceCommand(collectionManager));
-        manager.registerCommand("filter_greater_than_price", new FilterGreaterThanPriceCommand(collectionManager));
-        manager.registerCommand("print_field_descending_unit_of_measure",
+        manager.registerCommand(HelpCommand.name, new HelpCommand(manager));
+        manager.registerCommand(InfoCommand.name, new InfoCommand(collectionManager));
+        manager.registerCommand(ShowCommand.name, new ShowCommand(collectionManager));
+        manager.registerCommand(AddCommand.name, new AddCommand(collectionManager, inputReader));
+        manager.registerCommand(UpdateIdCommand.name, new UpdateIdCommand(collectionManager, inputReader));
+        manager.registerCommand(RemoveByIdCommand.name, new RemoveByIdCommand(collectionManager));
+        manager.registerCommand(ClearCommand.name, new ClearCommand(collectionManager));
+        manager.registerCommand(SaveCommand.name, new SaveCommand(collectionManager, fileManager));
+        manager.registerCommand(ExecuteScriptCommand.name, new ExecuteScriptCommand(manager));
+        manager.registerCommand(ExitCommand.name, exitCommand);
+        manager.registerCommand(AddIfMinCommand.name, new AddIfMinCommand(collectionManager, inputReader));
+        manager.registerCommand(RemoveGreaterCommand.name, new RemoveGreaterCommand(collectionManager, inputReader));
+        manager.registerCommand(RemoveLowerCommand.name, new RemoveLowerCommand(collectionManager, inputReader));
+        manager.registerCommand(FilterByPriceCommand.name, new FilterByPriceCommand(collectionManager));
+        manager.registerCommand(FilterGreaterThanPriceCommand.name, new FilterGreaterThanPriceCommand(collectionManager));
+        manager.registerCommand(PrintFieldDescendingUnitOfMeasureCommand.name,
                 new PrintFieldDescendingUnitOfMeasureCommand(collectionManager));
     }
 

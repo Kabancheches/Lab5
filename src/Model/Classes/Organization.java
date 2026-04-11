@@ -1,17 +1,12 @@
 package Model.Classes;
 
 import Model.Enums.OrganizationType;
-import Model.Interfaces.Validate;
 
-public class Organization implements Validate {
+public class Organization {
     private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private String fullName; //Строка не может быть пустой, Поле не может быть null
     private int employeesCount; //Значение поля должно быть больше 0
-    private Integer minEmployeesCount = 0;
-    private Boolean isMinEmployeesCountInclude = false;
-    private Integer maxEmployeeCount = null;
-    private Boolean isMaxEmployeeCountInclude = null;
     private OrganizationType type; //Поле может быть null
     private Address officialAddress; //Поле не может быть null
 
@@ -75,16 +70,6 @@ public class Organization implements Validate {
     }
 
     @Override
-    public boolean validate() {
-        if (id == null || id <= 0) return false;
-        if (name == null || name.isEmpty()) return false;
-        if (fullName == null || fullName.isEmpty()) return false;
-        if (employeesCount <= 0) return false;
-        if (officialAddress == null) return false;
-        return true;
-    }
-
-    @Override
     public String toString() {
         return String.format("Organization{id=%d, name='%s', fullName='%s', employeesCount=%d, type=%s, officialAddress=%s}",
                 id,
@@ -94,21 +79,5 @@ public class Organization implements Validate {
                 type == null ? "null" : type,
                 officialAddress
         );
-    }
-
-    public Boolean isMinEmployeesCountIncluded() {
-        return isMinEmployeesCountInclude;
-    }
-
-    public Integer getMinEmployeesCount() {
-        return minEmployeesCount;
-    }
-
-    public Integer getMaxEmployeeCount() {
-        return maxEmployeeCount;
-    }
-
-    public Boolean isMaxEmployeeCountIncluded() {
-        return isMaxEmployeeCountInclude;
     }
 }

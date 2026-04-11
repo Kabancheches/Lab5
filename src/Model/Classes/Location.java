@@ -1,10 +1,8 @@
 package Model.Classes;
 
-import Model.Interfaces.Validate;
-
 import java.util.Objects;
 
-public class Location implements Validate {
+public class Location {
     private float x;
     private Long y; //Поле не может быть null
     private int z;
@@ -39,12 +37,6 @@ public class Location implements Validate {
 
     public void setZ(int z) {
         this.z = z;
-    }
-
-    @Override
-    public boolean validate() {
-        if (y == null) return false;
-        return true;
     }
 
     @Override

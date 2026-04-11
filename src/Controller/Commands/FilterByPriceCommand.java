@@ -8,7 +8,7 @@ import java.util.List;
 
 public class FilterByPriceCommand implements Command {
     private final CollectionManager collectionManager;
-
+    public static String name = "filter_by_price";
     public FilterByPriceCommand(CollectionManager collectionManager) {
         this.collectionManager = collectionManager;
     }
@@ -43,7 +43,7 @@ public class FilterByPriceCommand implements Command {
             }
             return true;
         } catch (NumberFormatException e) {
-            System.out.println("Некорректная цена.");
+            System.out.println("[ОШИБКА] Некорректная цена.");
             return false;
         }
     }
@@ -55,6 +55,6 @@ public class FilterByPriceCommand implements Command {
 
     @Override
     public String getName() {
-        return "filter_by_price";
+        return name;
     }
 }

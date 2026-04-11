@@ -6,7 +6,7 @@ import Model.Managers.CollectionManager;
 import View.InputReader;
 
 public class AddCommand implements Command {
-
+    public static String name = "add";
     private final CollectionManager collectionManager;
     private final InputReader inputReader;
 
@@ -20,8 +20,8 @@ public class AddCommand implements Command {
         try {
             System.out.println("Добавление нового продукта:");
             Product product = inputReader.readProduct();
+            System.out.println();
             product.setId(collectionManager.getFirstNotUsedIdProduct());
-
             Organization manufacturer = product.getManufacturer();
             if (manufacturer != null) {
                 manufacturer.setId(collectionManager.getFirstNotUsedIdOrganization());
@@ -51,6 +51,6 @@ public class AddCommand implements Command {
 
     @Override
     public String getName() {
-        return "add";
+        return name;
     }
 }

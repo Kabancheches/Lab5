@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PrintFieldDescendingUnitOfMeasureCommand implements Command {
     private final CollectionManager collectionManager;
-
+    public static String name = "print_field_descending_unit_of_measure";
     public PrintFieldDescendingUnitOfMeasureCommand(CollectionManager collectionManager) {
         this.collectionManager = collectionManager;
     }
@@ -33,6 +33,6 @@ public class PrintFieldDescendingUnitOfMeasureCommand implements Command {
 
     @Override
     public String getName() {
-        return "print_field_descending_unit_of_measure";
+        return name;
     }
 }
