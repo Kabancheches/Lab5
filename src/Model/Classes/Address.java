@@ -48,7 +48,7 @@ public class Address {
         return String.format(
                 "Address{street: \"%s\"; town: %s}",
                 street == null ? "null" : street,
-                town == null ? "null" : street
+                town == null ? "null" : town
         );
     }
 }

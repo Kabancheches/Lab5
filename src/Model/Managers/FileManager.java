@@ -285,7 +285,7 @@ public class FileManager  {
                             System.err.println("Product на строке: " + lineNumber + ". Product пропущен из-за некорректных значений полей.");
                         }
                     } else {
-                        System.err.println("Product на строке: " + lineNumber + ". Product пропущен из-за ошибок парсинга.");
+                        System.err.println("Product на  строке: " + lineNumber + ". Product пропущен из-за ошибок парсинга.");
                     }
                 } catch (IllegalArgumentException e) {
                     System.err.println("Ошибка при парсинге строки номер: " + lineNumber + ". Ошибка: "+ e.getMessage());
@@ -398,9 +398,5 @@ public class FileManager  {
             System.err.println("[ОШИБКА] Файл " + file.getName() + " не записался: " + e);
             return false;
         }
-    }
-
-    public DateTimeFormatter getDateTimeFormatter() {
-        return dateTimeFormatter;
     }
 }

@@ -19,6 +19,6 @@ public class ConsoleUI {
     }
 
     public void printSeparator() {
-        System.out.println("========================================");
+        System.out.println("=========================================");
     }
 }
